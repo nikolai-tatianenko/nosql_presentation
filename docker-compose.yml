@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  php:
+    image: php:7.3
+    ports: 
+      - 85:80
+    container_name: "NOSQL_php"
+    volumes:
+      - ./:/var/www/html:cached # User-guided caching
