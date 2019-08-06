@@ -8,4 +8,21 @@ services:
       - 85:80
     container_name: "nosql_php"
     volumes:
-      - ./:/var/www/html:cached # User-guided caching
+      - ./docroot:/var/www/html:cached # User-guided caching
+
+  memcached:
+    container_name: "nosql_memcached"
+    image: memcached
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
