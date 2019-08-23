@@ -47,6 +47,9 @@ services:
     ports:
     - "8087:8081"
 
+  neo4j:
+    image: neo4j:3.0
+
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
