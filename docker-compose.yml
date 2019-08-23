@@ -10,9 +10,15 @@ services:
     volumes:
       - ./docroot:/var/www/html:cached # User-guided caching
 
+  # Memcache
   memcached:
     container_name: "nosql_memcached"
     image: memcached
+  # Memcache | Admin tool
+  phpmemcacheadmin:
+    image: hitwe/phpmemcachedadmin
+    ports:
+     - "86:80"
 
   redis:
     image: redis
