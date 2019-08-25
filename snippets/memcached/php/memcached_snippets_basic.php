@@ -220,3 +220,14 @@ function memcached_replace_if_exists($key, $value)
     $memcached->addServer('localhost', 11211);
     $memcached->replace($key, $value);
 }
+
+/**
+ * Uses Memcached with a persistent connection.
+ *
+ * @param string $persistentId The persistent connection ID.
+ */
+function memcached_persistent($persistentId)
+{
+    $memcached = new Memcached($persistentId);
+    $memcached->addServer('localhost', 11211);
+}
