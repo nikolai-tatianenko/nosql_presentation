@@ -167,3 +167,56 @@ function memcached_update($key, $value)
     $memcached->addServer('localhost', 11211);
     $memcached->set($key, $value);
 }
+
+/**
+ * Retrieves Memcached server statistics.
+ *
+ * @return array|bool An associative array of server statistics or false on failure.
+ */
+function memcached_stats()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    return $memcached->getStats();
+}
+
+/**
+ * Sets a value in Memcached with a custom expiration callback.
+ *
+ * @param string $key The key for the value.
+ * @param mixed $value The value to set.
+ * @param int $expiration The expiration time in seconds.
+ * @param callable $expirationCallback The callback function for dynamic expiration.
+ */
+function memcached_set_with_callback($key, $value, $expiration, $expirationCallback)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->set($key, $value, 0, $expiration, $expirationCallback);
+}
+
+/**
+ * Sets a value in Memcached only if the key does not exist.
+ *
+ * @param string $key The key for the value.
+ * @param mixed $value The value to set.
+ */
+function memcached_add_if_not_exists($key, $value)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->add($key, $value);
+}
+
+/**
+ * Sets a value in Memcached only if the key exists.
+ *
+ * @param string $key The key for the value.
+ * @param mixed $value The value to set.
+ */
+function memcached_replace_if_exists($key, $value)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->replace($key, $value);
+}
