@@ -117,3 +117,53 @@ function memcached_flush()
     $memcached->flush();
 }
 
+/**
+ * Stores an object in Memcached.
+ *
+ * @param string $key The key for the object.
+ * @param mixed $object The object to store.
+ */
+function memcached_store_object($key, $object)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->set($key, $object);
+}
+
+/**
+ * Retrieves an object from Memcached.
+ *
+ * @param string $key The key of the object.
+ * @return mixed|null The retrieved object or null if not found.
+ */
+function memcached_retrieve_object($key)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    return $memcached->get($key);
+}
+
+/**
+ * Adds a new server to an existing Memcached instance.
+ *
+ * @param string $host The server host.
+ * @param int $port The server port.
+ */
+function memcached_add_server($host, $port)
+{
+    $memcached = new Memcached();
+    $memcached->addServer($host, $port);
+}
+
+/**
+ * Updates a value in Memcached.
+ *
+ * @param string $key The key of the value.
+ * @param mixed $value The new value.
+ */
+function memcached_update($key, $value)
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->set($key, $value);
+}
