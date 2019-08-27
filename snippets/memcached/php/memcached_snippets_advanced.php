@@ -33,3 +33,47 @@ function memcached_consistent_hashing()
     $result = $memcached->getByKey($servers[1][0], $key);
     echo $result; // Output: Hello, Memcached!
 }
+
+/**
+ * Using Memcached with a callback to fetch a value if it doesn't exist.
+ */
+function memcached_get_with_callback()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->setOption(Memcached::OPT_PREFIX_KEY, 'myapp:');
+    $memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
+
+    $key = 'memcached_key';
+    $value = $memcached->get($key, function ($memcached, $key, &$value) {
+        // Custom logic to fetch the value if it doesn't exist in Memcached
+        $value = fetchDataFromDatabase($key);
+        return true;
+    });
+
+    echo $value; // Output: Value from Memcached or fetched from the database
+}
+
+/**
+ * Using Memcached with a custom serializer for complex data structures.
+ */
+function memcached_custom_serializer()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $serializer = new CustomSerializer();
+    $memcached->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_CUSTOM);
+    $memcached->setOption(Memcached::OPT_SERIALIZER_NAME, get_class($serializer));
+
+    $complexData = [
+        'name' => 'John',
+        'age' => 30,
+        'hobbies' => ['reading', 'gaming', 'coding'],
+    ];
+    $memcached->set('data', $complexData);
+
+    $result = $memcached->get('data');
+    print_r($result); // Output: Array containing the complex data structure
+}
+
