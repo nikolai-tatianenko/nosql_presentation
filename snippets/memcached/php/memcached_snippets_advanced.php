@@ -91,3 +91,17 @@ function memcached_cas()
     $memcached->cas($casToken, 'memcached_key', $modifiedValue);
 }
 
+/**
+ * Using Memcached with binary protocol for improved performance.
+ */
+function memcached_binary_protocol()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+    $memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
+
+    $memcached->set('memcached_key', 'Hello, Memcached!');
+    $result = $memcached->get('memcached_key');
+    echo $result;
+}
+
