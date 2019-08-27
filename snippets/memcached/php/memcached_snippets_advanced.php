@@ -77,3 +77,17 @@ function memcached_custom_serializer()
     print_r($result); // Output: Array containing the complex data structure
 }
 
+/**
+ * Using Memcached with CAS (Check-and-Set) operation for optimistic locking.
+ */
+function memcached_cas()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $memcached->set('memcached_key', 'initial_value');
+    $result = $memcached->get('memcached_key', null, $casToken);
+    $modifiedValue = modifyData($result);
+    $memcached->cas($casToken, 'memcached_key', $modifiedValue);
+}
+
