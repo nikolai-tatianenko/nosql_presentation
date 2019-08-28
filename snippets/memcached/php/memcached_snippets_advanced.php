@@ -205,3 +205,23 @@ function memcached_caching_database_query()
     print_r($result);
 }
 
+/**
+ * Using Memcached with consistent hashing for cache sharding.
+ */
+function memcached_cache_sharding()
+{
+    $memcached = new Memcached();
+    $memcached->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
+
+    $servers = [
+        ['memcached1.example.com', 11211],
+        ['memcached2.example.com', 11211],
+        ['memcached3.example.com', 11211],
+    ];
+
+    $memcached->addServers($servers);
+
+    $memcached->set('memcached_key', 'Hello, Memcached!', 0, 3600);
+    $memcached->getResultCode(); // Check the result code for success or failure
+}
+
