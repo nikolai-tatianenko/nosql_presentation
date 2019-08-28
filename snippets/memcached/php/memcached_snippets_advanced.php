@@ -185,6 +185,21 @@ function memcached_connection_pooling_persistent()
     $memcached->set('memcached_key', 'Hello, Memcached!', 0, 3600);
     $memcached->getResultCode(); // Check the result code for success or failure
 }
+
+/**
+ * Using Memcached for session storage.
+ */
+function memcached_session_storage()
+{
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', 'localhost:11211');
+
+    session_start();
+
+    $_SESSION['memcached_key'] = 'Hello, Memcached!';
+    echo $_SESSION['memcached_key'];
+}
+
 /**
  * Using Memcached for caching database query results.
  */
