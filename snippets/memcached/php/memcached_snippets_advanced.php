@@ -105,3 +105,29 @@ function memcached_binary_protocol()
     echo $result;
 }
 
+/**
+ * Using Memcached with expiration time in milliseconds.
+ */
+function memcached_milliseconds_expiration()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $memcached->set('memcached_key', 'Hello, Memcached!', 1000, 0); // Expires in 1 second
+    $result = $memcached->get('memcached_key');
+    echo $result;
+}
+
+/**
+ * Using Memcached with consistent timeouts for distributed caching.
+ */
+function memcached_consistent_timeouts()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $memcached->setOption(Memcached::OPT_SERVER_FAILURE_LIMIT, 3);
+    $memcached->setOption(Memcached::OPT_RETRY_TIMEOUT, 2);
+    $memcached->setOption(Memcached::OPT_DEAD_TIMEOUT, 30);
+}
+
