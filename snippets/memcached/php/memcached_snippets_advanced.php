@@ -225,3 +225,22 @@ function memcached_cache_sharding()
     $memcached->getResultCode(); // Check the result code for success or failure
 }
 
+/**
+ * Using Memcached with expiration time based on access frequency.
+ */
+function memcached_dynamic_expiration()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $key = 'memcached_key';
+    $expiration = getExpirationTimeBasedOnAccessFrequency($key); // Custom function to determine expiration time
+
+    $result = $memcached->get($key);
+    if (!$result) {
+        $result = fetchDataFromDatabase($key); // Fetch data from the database
+        $memcached->set($key, $result, 0, $expiration); // Cache the result with dynamic expiration
+    }
+
+    print_r($result);
+}
