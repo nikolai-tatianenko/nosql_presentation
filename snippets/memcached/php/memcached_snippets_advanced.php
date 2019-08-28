@@ -144,3 +144,18 @@ function memcached_connection_pooling()
     echo $result;
 }
 
+/**
+ * Using Memcached with consistent key hashing for efficient caching.
+ */
+function memcached_consistent_key_hashing()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $memcached->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
+
+    $memcached->set('memcached_key', 'Hello, Memcached!');
+    $result = $memcached->get('memcached_key');
+    echo $result;
+}
+
