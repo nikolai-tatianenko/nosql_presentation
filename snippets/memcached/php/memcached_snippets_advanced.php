@@ -159,3 +159,29 @@ function memcached_consistent_key_hashing()
     echo $result;
 }
 
+/**
+ * Using Memcached with asynchronous I/O.
+ */
+function memcached_async_io()
+{
+    $memcached = new Memcached();
+    $memcached->setOption(Memcached::OPT_ASYNC_CONNECTION, true);
+    $memcached->addServer('localhost', 11211);
+
+    $memcached->set('memcached_key', 'Hello, Memcached!', 0, 3600);
+    $memcached->getResultCode(); // Check the result code for success or failure
+}
+
+/**
+ * Using Memcached with connection pooling and persistent connections.
+ */
+function memcached_connection_pooling_persistent()
+{
+    $memcached = new Memcached();
+    $memcached->setOption(Memcached::OPT_CONNECT_TIMEOUT, 100); // Timeout in milliseconds
+    $memcached->setOption(Memcached::OPT_SERVER_FAILURE_LIMIT, 3);
+
+    $memcached->addServer('localhost', 11211); // Reuse connection for subsequent requests
+    $memcached->set('memcached_key', 'Hello, Memcached!', 0, 3600);
+    $memcached->getResultCode(); // Check the result code for success or failure
+}
