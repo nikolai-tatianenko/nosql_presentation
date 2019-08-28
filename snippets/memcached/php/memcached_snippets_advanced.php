@@ -131,3 +131,16 @@ function memcached_consistent_timeouts()
     $memcached->setOption(Memcached::OPT_DEAD_TIMEOUT, 30);
 }
 
+/**
+ * Using Memcached with connection pooling for efficient resource utilization.
+ */
+function memcached_connection_pooling()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211, 10); // 10 connections in the pool
+
+    $memcached->set('memcached_key', 'Hello, Memcached!');
+    $result = $memcached->get('memcached_key');
+    echo $result;
+}
+
