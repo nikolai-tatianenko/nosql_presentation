@@ -185,3 +185,23 @@ function memcached_connection_pooling_persistent()
     $memcached->set('memcached_key', 'Hello, Memcached!', 0, 3600);
     $memcached->getResultCode(); // Check the result code for success or failure
 }
+/**
+ * Using Memcached for caching database query results.
+ */
+function memcached_caching_database_query()
+{
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
+
+    $query = 'SELECT * FROM users WHERE id = 1';
+    $key = 'user_1';
+
+    $result = $memcached->get($key);
+    if (!$result) {
+        $result = fetchFromDatabase($query); // Fetch data from the database
+        $memcached->set($key, $result, 0, 3600); // Cache the result for future use
+    }
+
+    print_r($result);
+}
+
