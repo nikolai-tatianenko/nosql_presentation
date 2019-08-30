@@ -102,3 +102,68 @@ function checkMemcachedKeyExists (key) {
     });
   });
 }
+
+/**
+ * Sets multiple items in Memcached.
+ *
+ * @param {Object} items An object with key-value pairs.
+ */
+function setMultipleMemcachedValues (items) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.setMulti(items, (err) => {
+    if (err) {
+      console.error('Error setting multiple values in Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
+/**
+ * Gets multiple items from Memcached.
+ *
+ * @param {Array<string>} keys An array of keys to retrieve.
+ * @returns {Object} An object with key-value pairs.
+ */
+function getMultipleMemcachedValues (keys) {
+  const memcached = new Memcached('localhost:11211');
+  return new Promise((resolve, reject) => {
+    memcached.getMulti(keys, (err, data) => {
+      if (err) {
+        console.error('Error getting multiple values from Memcached:', err);
+        reject(err);
+      } else {
+        resolve(data);
+      }
+      memcached.end();
+    });
+  });
+}
+
+/**
+ * Deletes a key from Memcached.
+ *
+ * @param {string} key The key to delete.
+ */
+function deleteMemcachedKey (key) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.del(key, (err) => {
+    if (err) {
+      console.error('Error deleting key from Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
+/**
+ * Flushes all keys from Memcached.
+ */
+function flushMemcached () {
+  const memcached = new Memcached('localhost:11211');
+  memcached.flush((err) => {
+    if (err) {
+      console.error('Error flushing Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
