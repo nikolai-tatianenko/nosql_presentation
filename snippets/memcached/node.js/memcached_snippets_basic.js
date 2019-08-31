@@ -203,3 +203,50 @@ function retrieveObjectFromMemcached (key) {
     });
   });
 }
+/**
+ * Adds a new server to an existing Memcached instance.
+ *
+ * @param {string} host The server host.
+ * @param {number} port The server port.
+ */
+function addMemcachedServer (host, port) {
+  const memcached = new Memcached();
+  memcached.addServer(host, port);
+}
+
+/**
+ * Updates a value in Memcached.
+ *
+ * @param {string} key The key of the value.
+ * @param {*} value The new value.
+ */
+function updateMemcachedValue (key, value) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.replace(key, value, (err) => {
+    if (err) {
+      console.error('Error updating value in Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
+/**
+ * Retrieves Memcached server statistics.
+ *
+ * @returns {Object|boolean} An object with server statistics or false on failure.
+ */
+function getMemcachedStats () {
+  const memcached = new Memcached('localhost:11211');
+  return new Promise((resolve, reject) => {
+    memcached.stats((err, data) => {
+      if (err) {
+        console.error('Error retrieving Memcached stats:', err);
+        reject(err);
+      } else {
+        resolve(data);
+      }
+      memcached.end();
+    });
+  });
+}
+
