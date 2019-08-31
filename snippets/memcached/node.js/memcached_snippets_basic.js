@@ -167,3 +167,39 @@ function flushMemcached () {
   });
 }
 
+/**
+ * Stores an object in Memcached.
+ *
+ * @param {string} key The key for the object.
+ * @param {*} object The object to store.
+ */
+function storeObjectInMemcached (key, object) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.set(key, object, 0, (err) => {
+    if (err) {
+      console.error('Error storing object in Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
+/**
+ * Retrieves an object from Memcached.
+ *
+ * @param {string} key The key of the object.
+ * @returns {*} The retrieved object or null if not found.
+ */
+function retrieveObjectFromMemcached (key) {
+  const memcached = new Memcached('localhost:11211');
+  return new Promise((resolve, reject) => {
+    memcached.get(key, (err, data) => {
+      if (err) {
+        console.error('Error retrieving object from Memcached:', err);
+        reject(err);
+      } else {
+        resolve(data);
+      }
+      memcached.end();
+    });
+  });
+}
