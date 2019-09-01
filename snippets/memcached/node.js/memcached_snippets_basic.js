@@ -250,3 +250,21 @@ function getMemcachedStats () {
   });
 }
 
+/**
+ * Sets a value in Memcached with a custom expiration callback.
+ *
+ * @param {string} key The key for the value.
+ * @param {*} value The value to set.
+ * @param {number} expiration The expiration time in seconds.
+ * @param {Function} expirationCallback The callback function for dynamic expiration.
+ */
+function setMemcachedValueWithCallback (
+  key, value, expiration, expirationCallback) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.set(key, value, 0, expiration, (err) => {
+    if (err) {
+      console.error('Error setting value with callback in Memcached:', err);
+    }
+    memcached.end();
+  }, expirationCallback);
+}
