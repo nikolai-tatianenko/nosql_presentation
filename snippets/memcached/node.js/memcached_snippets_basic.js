@@ -203,6 +203,7 @@ function retrieveObjectFromMemcached (key) {
     });
   });
 }
+
 /**
  * Adds a new server to an existing Memcached instance.
  *
@@ -299,4 +300,14 @@ function replaceMemcachedValueIfExists (key, value) {
     }
     memcached.end();
   });
+}
+
+/**
+ * Uses Memcached with a persistent connection.
+ *
+ * @param {string} persistentId The persistent connection ID.
+ */
+function usePersistentMemcachedConnection (persistentId) {
+  const memcached = new Memcached(persistentId);
+  memcached.addServer('localhost', 11211);
 }
