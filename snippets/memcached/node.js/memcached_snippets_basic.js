@@ -268,3 +268,35 @@ function setMemcachedValueWithCallback (
     memcached.end();
   }, expirationCallback);
 }
+
+/**
+ * Sets a value in Memcached only if the key does not exist.
+ *
+ * @param {string} key The key for the value.
+ * @param {*} value The value to set.
+ */
+function addMemcachedValueIfNotExists (key, value) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.add(key, value, (err) => {
+    if (err) {
+      console.error('Error adding value if not exists in Memcached:', err);
+    }
+    memcached.end();
+  });
+}
+
+/**
+ * Sets a value in Memcached only if the key exists.
+ *
+ * @param {string} key The key for the value.
+ * @param {*} value The value to set.
+ */
+function replaceMemcachedValueIfExists (key, value) {
+  const memcached = new Memcached('localhost:11211');
+  memcached.replace(key, value, (err) => {
+    if (err) {
+      console.error('Error replacing value if exists in Memcached:', err);
+    }
+    memcached.end();
+  });
+}
