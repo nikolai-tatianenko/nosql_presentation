@@ -51,3 +51,61 @@ function memcachedConsistentHashing() {
   });
 }
 
+/**
+ * Using Memcached with a callback to fetch a value if it doesn't exist.
+ */
+function memcachedGetWithCallback() {
+  const memcached = new Memcached('localhost:11211');
+  memcached.options.prefix = 'myapp:';
+  memcached.options.binary = true;
+
+  const key = 'memcached_key';
+  memcached.get(key, (err, value) => {
+    if (err) {
+      console.error('Error getting value from Memcached with callback:', err);
+    } else if (value === undefined) {
+      fetchDataFromDatabase(key, (data) => {
+        memcached.set(key, data, 0, (err) => {
+          if (err) {
+            console.error('Error setting value in Memcached with callback:', err);
+          }
+          memcached.end();
+        });
+      });
+    } else {
+      console.log(value); // Output: Value from Memcached or fetched from the database
+      memcached.end();
+    }
+  });
+}
+
+/**
+ * Using Memcached with a custom serializer for complex data structures.
+ */
+function memcachedCustomSerializer() {
+  const memcached = new Memcached('localhost:11211');
+  const serializer = new CustomSerializer();
+  memcached.options.serializer = serializer;
+  memcached.options.transcoder = false;
+
+  const complexData = {
+    name: 'John',
+    age: 30,
+    hobbies: ['reading', 'gaming', 'coding'],
+  };
+  memcached.set('data', complexData, 0, (err) => {
+    if (err) {
+      console.error('Error setting value with custom serializer in Memcached:', err);
+    } else {
+      memcached.get('data', (err, result) => {
+        if (err) {
+          console.error('Error getting value with custom serializer from Memcached:', err);
+        } else {
+          console.log(result); // Output: Object containing the complex data structure
+        }
+        memcached.end();
+      });
+    }
+  });
+}
+
