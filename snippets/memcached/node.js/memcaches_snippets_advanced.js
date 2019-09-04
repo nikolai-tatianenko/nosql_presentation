@@ -109,3 +109,25 @@ function memcachedCustomSerializer() {
   });
 }
 
+/**
+ * Using Memcached with CAS (Check-and-Set) operation for optimistic locking.
+ */
+function memcachedCAS() {
+  const memcached = new Memcached('localhost:11211');
+  const key = 'memcached_key';
+
+  memcached.get(key, (err, value, cas) => {
+    if (err) {
+      console.error('Error getting value with CAS in Memcached:', err);
+    } else {
+      const modifiedValue = modifyData(value);
+      memcached.cas(key, modifiedValue, 0, cas, (err) => {
+        if (err) {
+          console.error('Error setting value with CAS in Memcached:', err);
+        }
+        memcached.end();
+      });
+    }
+  });
+}
+
