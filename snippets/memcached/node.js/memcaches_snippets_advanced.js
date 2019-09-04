@@ -175,3 +175,38 @@ function memcachedMillisecondsExpiration() {
     }
   });
 }
+
+/**
+ * Using Memcached with consistent timeouts for distributed caching.
+ */
+function memcachedConsistentTimeouts() {
+  const memcached = new Memcached('localhost:11211');
+  memcached.options.failures = 3;
+  memcached.options.retry = 2;
+  memcached.options.timeout = 30;
+
+  memcached.end();
+}
+
+/**
+ * Using Memcached with connection pooling for efficient resource utilization.
+ */
+function memcachedConnectionPooling() {
+  const memcached = new Memcached('localhost:11211', { poolSize: 10 });
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with connection pooling in Memcached:', err);
+    } else {
+      memcached.get('memcached_key', (err, result) => {
+        if (err) {
+          console.error('Error getting value with connection pooling from Memcached:', err);
+        } else {
+          console.log(result); // Output: Hello, Memcached!
+        }
+        memcached.end();
+      });
+    }
+  });
+}
+
