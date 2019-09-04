@@ -131,3 +131,47 @@ function memcachedCAS() {
   });
 }
 
+/**
+ * Using Memcached with binary protocol for improved performance.
+ */
+function memcachedBinaryProtocol() {
+  const memcached = new Memcached('localhost:11211');
+  memcached.options.binary = true;
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with binary protocol in Memcached:', err);
+    } else {
+      memcached.get('memcached_key', (err, result) => {
+        if (err) {
+          console.error('Error getting value with binary protocol from Memcached:', err);
+        } else {
+          console.log(result); // Output: Hello, Memcached!
+        }
+        memcached.end();
+      });
+    }
+  });
+}
+
+/**
+ * Using Memcached with expiration time in milliseconds.
+ */
+function memcachedMillisecondsExpiration() {
+  const memcached = new Memcached('localhost:11211');
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 1000, (err) => {
+    if (err) {
+      console.error('Error setting value with milliseconds expiration in Memcached:', err);
+    } else {
+      memcached.get('memcached_key', (err, result) => {
+        if (err) {
+          console.error('Error getting value with milliseconds expiration from Memcached:', err);
+        } else {
+          console.log(result); // Output: Hello, Memcached!
+        }
+        memcached.end();
+      });
+    }
+  });
+}
