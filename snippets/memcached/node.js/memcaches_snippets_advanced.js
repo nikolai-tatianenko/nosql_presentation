@@ -210,3 +210,47 @@ function memcachedConnectionPooling() {
   });
 }
 
+/**
+ * Using Memcached with consistent key hashing for efficient caching.
+ */
+function memcachedConsistentKeyHashing() {
+  const memcached = new Memcached('localhost:11211');
+  memcached.options.ketamaCompatible = true;
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with consistent key hashing in Memcached:', err);
+    } else {
+      memcached.get('memcached_key', (err, result) => {
+        if (err) {
+          console.error('Error getting value with consistent key hashing from Memcached:', err);
+        } else {
+          console.log(result); // Output: Hello, Memcached!
+        }
+        memcached.end();
+      });
+    }
+  });
+}
+
+/**
+ * Using Memcached with asynchronous I/O.
+ */
+function memcachedAsyncIO() {
+  const memcached = new Memcached('localhost:11211', { async: true });
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with asynchronous I/O in Memcached:', err);
+    }
+    memcached.getResultCode((err, resultCode) => {
+      if (err) {
+        console.error('Error getting result code with asynchronous I/O from Memcached:', err);
+      } else {
+        console.log(resultCode); // Check the result code for success or failure
+      }
+      memcached.end();
+    });
+  });
+}
+
