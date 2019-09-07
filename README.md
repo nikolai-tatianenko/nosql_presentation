@@ -1,6 +1,6 @@
 # Presentation about NoSQL databases.
 
-
+Link to Slides: [https://slides.com/nikolai-tatianenko/nosql](https://slides.com/nikolai-tatianenko/nosql)
 
 ## Roadmap
 - [x] Snippets for Memcached
