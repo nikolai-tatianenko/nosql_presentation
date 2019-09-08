@@ -254,3 +254,29 @@ function memcachedAsyncIO() {
   });
 }
 
+/**
+ * Using Memcached with connection pooling and persistent connections.
+ */
+function memcachedConnectionPoolingPersistent() {
+  const memcached = new Memcached('localhost:11211', {
+    timeout: 100,
+    failures: 3,
+    retries: 2,
+    poolSize: 1,
+    reconnect: true,
+  });
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with connection pooling and persistent connections in Memcached:', err);
+    }
+    memcached.getResultCode((err, resultCode) => {
+      if (err) {
+        console.error('Error getting result code with connection pooling and persistent connections from Memcached:', err);
+      } else {
+        console.log(resultCode); // Check the result code for success or failure
+      }
+      memcached.end();
+    });
+  });
+}
