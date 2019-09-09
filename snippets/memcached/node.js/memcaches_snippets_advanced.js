@@ -280,3 +280,49 @@ function memcachedConnectionPoolingPersistent() {
     });
   });
 }
+/**
+ * Using Memcached for session storage.
+ */
+function memcachedSessionStorage() {
+  const session = require('express-session');
+  const MemcachedStore = require('connect-memcached')(session);
+
+  const sessionMiddleware = session({
+    store: new MemcachedStore({
+      hosts: ['localhost:11211'],
+    }),
+    secret: 'my_secret',
+    resave: false,
+    saveUninitialized: false,
+  });
+
+  // Use the session middleware with Express or any other framework
+}
+
+/**
+ * Using Memcached for caching database query results.
+ */
+function memcachedCachingDatabaseQuery() {
+  const memcached = new Memcached('localhost:11211');
+
+  const query = 'SELECT * FROM users WHERE id = 1';
+  const key = 'user_1';
+
+  memcached.get(key, (err, result) => {
+    if (err) {
+      console.error('Error getting value from Memcached for caching database query:', err);
+    } else if (result) {
+      console.log(result); // Output: Cached result
+    } else {
+      fetchDataFromDatabase(query, (data) => {
+        memcached.set(key, data, 0, (err) => {
+          if (err) {
+            console.error('Error setting value in Memcached for caching database query:', err);
+          }
+          console.log(data); // Output: Fetched result
+          memcached.end();
+        });
+      });
+    }
+  });
+}
