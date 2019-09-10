@@ -326,3 +326,34 @@ function memcachedCachingDatabaseQuery() {
     }
   });
 }
+
+/**
+ * Using Memcached with consistent hashing for cache sharding.
+ */
+function memcachedCacheSharding() {
+  const memcached = new Memcached();
+  memcached.options.ketamaCompatible = true;
+
+  const servers = [
+    { host: 'memcached1.example.com', port: 11211 },
+    { host: 'memcached2.example.com', port: 11211 },
+    { host: 'memcached3.example.com', port: 11211 },
+  ];
+
+  memcached.addServers(servers);
+
+  memcached.set('memcached_key', 'Hello, Memcached!', 0, (err) => {
+    if (err) {
+      console.error('Error setting value with cache sharding in Memcached:', err);
+    } else {
+      memcached.get('memcached_key', (err, result) => {
+        if (err) {
+          console.error('Error getting value with cache sharding from Memcached:', err);
+        } else {
+          console.log(result); // Output: Hello, Memcached!
+        }
+        memcached.end();
+      });
+    }
+  });
+}
