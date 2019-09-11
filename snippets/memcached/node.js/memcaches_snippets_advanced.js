@@ -357,3 +357,30 @@ function memcachedCacheSharding() {
     }
   });
 }
+
+/**
+ * Using Memcached with expiration time based on access frequency.
+ */
+function memcachedDynamicExpiration() {
+  const memcached = new Memcached('localhost:11211');
+
+  const key = 'memcached_key';
+  const expiration = getExpirationTimeBasedOnAccessFrequency(key); // Custom function to determine expiration time
+
+  memcached.get(key, (err, result) => {
+    if (err) {
+      console.error('Error getting value with dynamic expiration from Memcached:', err);
+    } else if (result) {
+      console.log(result); // Output: Cached result
+    } else {
+      fetchDataFromDatabase(key, (data) => {
+        memcached.set(key, data, 0, expiration, (err) => {
+          if (err) {
+            console.error('Error setting value with dynamic expiration in Memcached:', err);
+          }
+          console.log(data); // Output: Fetched result
+          memcached.end();
+        });
+      });
+    }
+  });
