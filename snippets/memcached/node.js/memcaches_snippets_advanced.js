@@ -280,6 +280,7 @@ function memcachedConnectionPoolingPersistent() {
     });
   });
 }
+
 /**
  * Using Memcached for session storage.
  */
@@ -384,3 +385,4 @@ function memcachedDynamicExpiration() {
       });
     }
   });
+}
