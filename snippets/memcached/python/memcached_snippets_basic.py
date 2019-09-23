@@ -86,3 +86,91 @@ def key_exists(key):
 # Usage example
 exists = key_exists('key1')
 print(exists)  # Output: True
+
+def set_multiple(items):
+    """
+    Sets multiple items in Memcached.
+
+    Args:
+        items (dict): An associative array of key-value pairs.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.set_multi(items)
+
+# Usage example
+set_multiple({'key2': 'value2', 'key3': 'value3'})
+
+def get_multiple(keys):
+    """
+    Gets multiple items from Memcached.
+
+    Args:
+        keys (list): An array of keys to retrieve.
+
+    Returns:
+        dict: An associative array of key-value pairs.
+    """
+    client = memcache.Client(['localhost:11211'])
+    return client.get_multi(keys)
+
+# Usage example
+result = get_multiple(['key1', 'key2', 'key3'])
+print(result)  # Output: {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+
+def delete_key(key):
+    """
+    Deletes a key from Memcached.
+
+    Args:
+        key (str): The key to delete.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.delete(key)
+
+# Usage example
+delete_key('key2')
+result = get_value('key2')
+print(result)  # Output: None
+
+def flush_cache():
+    """
+    Flushes all keys from Memcached.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.flush_all()
+
+# Usage example
+flush_cache()
+
+def store_object(key, obj):
+    """
+    Stores an object in Memcached.
+
+    Args:
+        key (str): The key for the object.
+        obj (mixed): The object to store.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.set(key, obj)
+
+# Usage example
+store_object('object1', {'name': 'John', 'age': 30})
+result = get_value('object1')
+print(result)  # Output: {'name': 'John', 'age': 30}
+
+def retrieve_object(key):
+    """
+    Retrieves an object from Memcached.
+
+    Args:
+        key (str): The key of the object.
+
+    Returns:
+        mixed: The retrieved object or None if not found.
+    """
+    client = memcache.Client(['localhost:11211'])
+    return client.get(key)
+
+# Usage example
+result = retrieve_object('object1')
+print(result)  # Output: {'name': 'John', 'age': 30}
