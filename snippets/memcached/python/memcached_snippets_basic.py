@@ -174,3 +174,83 @@ def retrieve_object(key):
 # Usage example
 result = retrieve_object('object1')
 print(result)  # Output: {'name': 'John', 'age': 30}
+
+def add_server(host, port):
+    """
+    Adds a new server to an existing Memcached instance.
+
+    Args:
+        host (str): The server host.
+        port (int): The server port.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.add_server(host, port)
+
+# Usage example
+add_server('127.0.0.1', 11211)
+
+def update_value(key, value):
+    """
+    Updates a value in Memcached.
+
+    Args:
+        key (str): The key of the value.
+        value (mixed): The new value.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.set(key, value)
+
+# Usage example
+update_value('key1', 'updated value')
+result = get_value('key1')
+print(result)  # Output: updated value
+
+def get_stats():
+    """
+    Retrieves Memcached server statistics.
+
+    Returns:
+        dict|bool: An associative array of server statistics or False on failure.
+    """
+    client = memcache.Client(['localhost:11211'])
+    return client.get_stats()
+
+# Usage example
+stats = get_stats()
+print(stats)  # Output: Server statistics
+
+def set_with_callback(key, value, expiration, expiration_callback):
+    """
+    Sets a value in Memcached with a custom expiration callback.
+
+    Args:
+        key (str): The key for the value.
+        value (mixed): The value to set.
+        expiration (int): The expiration time in seconds.
+        expiration_callback (callable): The callback function for dynamic expiration.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.set(key, value, 0, expiration, expiration_callback)
+
+# Usage example
+def expiration_callback(key, value):
+    # Custom expiration logic
+    pass
+
+set_with_callback('key1', 'value1', 3600, expiration_callback)
+
+def add_if_not_exists(key, value):
+    """
+    Sets a value in Memcached only if the key does not exist.
+
+    Args:
+        key (str): The key for the value.
+        value (mixed): The value to set.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.add(key, value)
+
+# Usage example
+add_if_not_exists('key4', 'value4')
+result = get_value('key4')
+print(result)  # Output: value4
