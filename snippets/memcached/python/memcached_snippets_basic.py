@@ -254,3 +254,35 @@ def add_if_not_exists(key, value):
 add_if_not_exists('key4', 'value4')
 result = get_value('key4')
 print(result)  # Output: value4
+
+def replace_if_exists(key, value):
+    """
+    Sets a value in Memcached only if the key exists.
+
+    Args:
+        key (str): The key for the value.
+        value (mixed): The value to set.
+    """
+    client = memcache.Client(['localhost:11211'])
+    client.replace(key, value)
+
+# Usage example
+replace_if_exists('key4', 'new value')
+result = get_value('key4')
+print(result)  # Output: new value
+
+def persistent_connection(persistent_id):
+    """
+    Uses Memcached with a persistent connection.
+
+    Args:
+        persistent_id (str): The persistent connection ID.
+    """
+    client = memcache.Client([persistent_id])
+    client.set('localhost:11211')
+
+# Usage example
+persistent_connection('my_connection')
+set_value('key5', 'value5')
+result = get_value('key5')
+print(result)  # Output: value5
