@@ -120,3 +120,43 @@ def memcached_milliseconds_expiration():
 # Usage example
 memcached_milliseconds_expiration()
 
+def memcached_consistent_timeouts():
+    """
+    Using Memcached with consistent timeouts for distributed caching.
+    """
+    memcached = memcache.Client(['localhost:11211'])
+
+    memcached.set_option(memcache.Client.SERVER_FAILURE_LIMIT, 3)
+    memcached.set_option(memcache.Client.RETRY_TIMEOUT, 2)
+    memcached.set_option(memcache.Client.DEAD_TIMEOUT, 30)
+
+# Usage example
+memcached_consistent_timeouts()
+
+def memcached_connection_pooling():
+    """
+    Using Memcached with connection pooling for efficient resource utilization.
+    """
+    memcached = memcache.Client(['localhost:11211'], pool_size=10)
+
+    memcached.set('memcached_key', 'Hello, Memcached!')
+    result = memcached.get('memcached_key')
+    print(result)
+
+# Usage example
+memcached_connection_pooling()
+
+def memcached_consistent_key_hashing():
+    """
+    Using Memcached with consistent key hashing for efficient caching.
+    """
+    memcached = memcache.Client(['localhost:11211'])
+
+    memcached.set_option(memcache.Client.LIBKETAMA_COMPATIBLE, True)
+
+    memcached.set('memcached_key', 'Hello, Memcached!')
+    result = memcached.get('memcached_key')
+    print(result)
+
+# Usage example
+memcached_consistent_key_hashing()
