@@ -160,3 +160,29 @@ def memcached_consistent_key_hashing():
 
 # Usage example
 memcached_consistent_key_hashing()
+
+def memcached_async_io():
+    """
+    Using Memcached with asynchronous I/O.
+    """
+    memcached = memcache.Client(['localhost:11211'], async=True)
+
+    memcached.set('memcached_key', 'Hello, Memcached!', time=3600)
+    memcached.get('memcached_key')
+    memcached.wait_for_all()
+
+# Usage example
+memcached_async_io()
+
+def memcached_connection_pooling_persistent():
+    """
+    Using Memcached with connection pooling and persistent connections.
+    """
+    memcached = memcache.Client(['localhost:11211'], connect_timeout=0.1,
+                                server_failure_limit=3, cache_cas=True)
+
+    memcached.set('memcached_key', 'Hello, Memcached!', time=3600)
+    memcached.get('memcached_key')
+    memcached.touch('memcached_key', 3600)
+    memcached.check_key('memcached_key')
+
