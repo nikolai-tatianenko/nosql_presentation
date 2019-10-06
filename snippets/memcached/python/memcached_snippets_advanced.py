@@ -186,3 +186,21 @@ def memcached_connection_pooling_persistent():
     memcached.touch('memcached_key', 3600)
     memcached.check_key('memcached_key')
 
+# Usage example
+memcached_connection_pooling_persistent()
+
+def memcached_session_storage():
+    """
+    Using Memcached for session storage.
+    """
+    memcached = memcache.Client(['localhost:11211'])
+
+    memcache_module = memcache.Memcached()
+    memcache_module.set_servers(['localhost:11211'])
+
+    session_save_path = 'tcp://localhost:11211'
+    session_module_name = 'memcache'
+    session_module_args = 'tcp://localhost:11211?persistent=1&weight=2&timeout=2&retry_interval=10'
+
+# Usage example
+memcached_session_storage()
