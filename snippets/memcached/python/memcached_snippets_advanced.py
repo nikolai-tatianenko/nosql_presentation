@@ -238,3 +238,22 @@ def memcached_cache_sharding():
 
 # Usage example
 memcached_cache_sharding()
+
+def memcached_dynamic_expiration():
+    """
+    Using Memcached with expiration time based on access frequency.
+    """
+    memcached = memcache.Client(['localhost:11211'])
+
+    key = 'memcached_key'
+    expiration = getExpirationTimeBasedOnAccessFrequency(key)  # Custom function to determine expiration time
+
+    result = memcached.get(key)
+    if not result:
+        result = fetchDataFromDatabase(key)  # Fetch data from the database
+        memcached.set(key, result, time=expiration)  # Cache the result with dynamic expiration
+
+    print(result)
+
+# Usage example
+memcached_dynamic_expiration()
