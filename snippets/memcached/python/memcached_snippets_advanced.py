@@ -204,3 +204,37 @@ def memcached_session_storage():
 
 # Usage example
 memcached_session_storage()
+
+def memcached_caching_database_query():
+    """
+    Using Memcached for caching database query results.
+    """
+    memcached = memcache.Client(['localhost:11211'])
+
+    query = 'SELECT * FROM users WHERE id = 1'
+    key = 'user_1'
+
+    result = memcached.get(key)
+    if not result:
+        result = fetchFromDatabase(query)  # Fetch data from the database
+        memcached.set(key, result, time=3600)  # Cache the result for future use
+
+    print(result)
+
+# Usage example
+memcached_caching_database_query()
+
+def memcached_cache_sharding():
+    """
+    Using Memcached with consistent hashing for cache sharding.
+    """
+    memcached = memcache.Client([('memcached1.example.com', 11211),
+                                 ('memcached2.example.com', 11211),
+                                 ('memcached3.example.com', 11211)],
+                                hash_fn=memcache.hashers.CRC32_HASH)
+
+    memcached.set('memcached_key', 'Hello, Memcached!', time=3600)
+    memcached.get('memcached_key')
+
+# Usage example
+memcached_cache_sharding()
