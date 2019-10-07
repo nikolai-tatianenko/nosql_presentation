@@ -5,8 +5,8 @@ Link to Slides: [https://slides.com/nikolai-tatianenko/nosql](https://slides.com
 ## Roadmap
 - [x] Snippets for Memcached
   - [x] in PHP lang
-  - [] in Python lang
-  - [] in NodeJS lang
+  - [x] in Python lang
+  - [x] in NodeJS lang
 - [ ] Snippets for Redis
 - [ ] Snippets for MongoDB
 - [ ] Snippets for Cassandra
